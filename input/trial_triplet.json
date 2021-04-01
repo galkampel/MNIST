@@ -1,0 +1,14 @@
+{
+    "seed": 0,
+    "model_id": 1,
+    "epoch": 20,
+    "cuda_device": 0,
+    "criterion_type": "triplet",
+    "normalize": true,
+    "apply_cls": false,
+    "n_splits": 10,
+    "random_state": 1,
+    "verbose": true,
+    "data_folder": "MNIST",
+    "n_trials": 20
+}

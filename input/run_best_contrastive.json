@@ -1,0 +1,27 @@
+{
+    "seed": 0,
+    "model_id": 1,
+    "epoch": 20,
+    "cuda_device": 0,
+    "criterion_type": "contrastive",
+    "normalize": true,
+    "apply_cls": false,
+    "n_splits": 10,
+    "random_state": 1,
+    "verbose": true,
+    "data_folder": "MNIST",
+    "n_trials": 20,
+    "run_params": {
+        "train_model": true,
+        "save_model": true,
+        "plot_model": false,
+        "load_model": false,
+        "model_name": "",
+        "lr": 1e-3,
+        "wd": 0.0,
+        "batch_size": 32,
+        "model_params": {
+
+        }
+    }
+}

@@ -4,7 +4,7 @@ import torchvision.datasets as datasets
 from torch.utils.data import Dataset
 
 
-def load_MNIST_dataset(transform, train, root='~/MNIST/', download=True):
+def load_MNIST_dataset(transform, train, root, download=False):  # root='~/MNIST/'
     return datasets.MNIST(
         root=root, train=train, download=download, transform=transform
     )
@@ -26,14 +26,14 @@ class MNISTContrastiveDataset(Dataset):
     def __getitem__(self, index):
         x_p = torch.tensor(self.X[index], dtype=torch.float).unsqueeze(0)
         label = self.y[index]
-        x_q, y_i = self.set_x_q(label, index)
+        x_q, y_i = self.set_x_q(label)
         x_q = torch.tensor(x_q, dtype=torch.float).unsqueeze(0)
         y_i = torch.tensor(y_i, dtype=torch.float)  # dtype=torch.uint8
         # y_i = torch.tensor(y_i, dtype=torch.uint8)
         label = torch.tensor(label, dtype=torch.long)
         return (x_p, x_q, y_i), label
 
-    def set_x_q(self, label, index):
+    def set_x_q(self, label):
         label_dist = self.distribution_dict[label]
         cand_label = np.random.choice(self.y_vals, p=label_dist)
         y_i = int(label == cand_label)

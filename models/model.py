@@ -1,5 +1,4 @@
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class ConvNet(nn.Module):
@@ -41,7 +40,7 @@ class ConvNet(nn.Module):
         x = self.mlp(x)  # (B, 128)
         if predict_class:
             x = self.fc(x)  # (B, 10)
-            x = F.log_softmax(x, dim=1)
+            # x = F.log_softmax(x, dim=1)
         return x
 
 
@@ -78,5 +77,5 @@ class MLPNet(nn.Module):
         x = self.mlp(x)  # (B, 128)
         if predict_class:
             x = self.fc(x)  # (B, 10)
-            x = F.log_softmax(x, dim=1)
+            # x = F.log_softmax(x, dim=1)
         return x

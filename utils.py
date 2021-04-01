@@ -32,6 +32,8 @@ def create_similarity_dist_dict(criterion_type='contrastive'):
             contrastive_dist_dict[label] = np.array(dist) / 2
             contrastive_dist_dict[label][label] = 0.5
         return contrastive_dist_dict
+    elif criterion_type == 'standard':
+        return {}
 
 
 def l2_norm(x, y):
@@ -107,7 +109,7 @@ def plot_accuracy(acc_dict, folder_plot, model_name, y_label='Accuracy', x_label
     # plt.legend()
     plt.tight_layout()
     if save_model:
-        plt.savefig(os.path.join(folder_plot, f"{model_name}.png"))
+        plt.savefig(os.path.join(os.getcwd(), folder_plot, f"{model_name}.png"))
         plt.close()
     else:
         plt.show()
