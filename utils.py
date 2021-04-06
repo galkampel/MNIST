@@ -109,7 +109,9 @@ def plot_accuracy(acc_dict, folder_plot, model_name, y_label='Accuracy', x_label
     # plt.legend()
     plt.tight_layout()
     if save_model:
-        plt.savefig(os.path.join(os.getcwd(), folder_plot, f"{model_name}.png"))
+        folder_path = os.path.join(os.getcwd(), folder_plot)
+        os.makedirs(folder_path, exist_ok=True)
+        plt.savefig(os.path.join(folder_path, f"{model_name}.png"))
         plt.close()
     else:
         plt.show()

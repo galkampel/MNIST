@@ -14,12 +14,12 @@
     "run_params": {
         "train_model": true,
         "save_model": true,
-        "plot_model": false,
+        "plot_model": true,
         "load_model": false,
         "model_name": "",
-        "lr": 1e-3,
-        "wd": 0.0,
-        "batch_size": 32,
+        "lr": 0.00123,
+        "wd": 0.0001,
+        "batch_size": 128,
         "model_params": {
 
         }

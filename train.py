@@ -37,7 +37,7 @@ class Trainer:
     def train_epoch_triplet(self, dataloader):
         self.model.train()
         for (x_a, x_p, x_n), targets in dataloader:
-            x_a, x_q = x_a.to(self.device)
+            x_a = x_a.to(self.device)
             x_p, x_n = x_p.to(self.device), x_n.to(self.device)
             self.optimizer.zero_grad()
             phi_x_a = self.model(x_a)  # embeddings of x_a
@@ -45,7 +45,7 @@ class Trainer:
             phi_x_n = self.model(x_n)  # embeddings of x_n
             loss = self.criterion(phi_x_a, phi_x_p, phi_x_n, self.normalize)
             if self.criterion_cls is not None:
-                logits = self.model.fc(phi_x_p)
+                logits = self.model.fc(phi_x_a)
                 loss_cls = self.criterion_cls(logits, targets.to(self.device))  # CrossEntropyLoss
                 loss += loss_cls
             loss.backward()

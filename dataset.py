@@ -61,7 +61,7 @@ class MNISTTripletDataset(Dataset):
         pos_example = torch.tensor(pos_example, dtype=torch.float).unsqueeze(0)
         neg_example = self.set_negative_example(label)
         neg_example = torch.tensor(neg_example, dtype=torch.float).unsqueeze(0)
-        label = torch.tensor(label, dtype=torch.uint8)
+        label = torch.tensor(label, dtype=torch.long)
         return (anchor, pos_example, neg_example), label
 
     def set_positive_example(self, label, index):

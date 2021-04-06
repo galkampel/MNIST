@@ -5,7 +5,7 @@
     "cuda_device": 0,
     "criterion_type": "contrastive",
     "normalize": true,
-    "apply_cls": false,
+    "apply_cls": true,
     "n_splits": 10,
     "random_state": 1,
     "verbose": true,
@@ -14,12 +14,12 @@
     "run_params": {
         "train_model": true,
         "save_model": true,
-        "plot_model": false,
+        "plot_model": true,
         "load_model": false,
         "model_name": "",
-        "lr": 1e-3,
-        "wd": 0.0,
-        "batch_size": 32,
+        "lr": 0.0032,
+        "wd": 0.0001,
+        "batch_size": 64,
         "model_params": {
 
         }

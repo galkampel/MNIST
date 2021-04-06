@@ -73,7 +73,6 @@ def objective(trial):
     val_accs = []
     for fold, (val_idxes, train_idxes) in enumerate(skf.split(data, targets), 1):  # original: (train_idxes, val_idxes)
         print(f'tuning fold {fold}')
-        print(f'train size = {len(train_idxes)}\tvalidation size = {len(val_idxes)}')
         train_loader = set_data_loader(training_set, train_idxes, batch_size, CRITERION_TYPE, shuffle=True)
         val_loader = set_data_loader(training_set, val_idxes, batch_size, CRITERION_TYPE)
         model = ConvNet(**model_params) if MODEL_ID == 1 else MLPNet(**model_params)
@@ -86,7 +85,7 @@ def objective(trial):
             train_acc = trainer.evaluate_epoch(train_loader)
             val_acc = trainer.evaluate_epoch(val_loader)
             if VERBOSE:
-                print(f'train accuracy = {train_acc:.4f}\tvalidation accuracy = {val_acc:.4f}')
+                print(f'epoch {epoch}:\ttrain accuracy = {train_acc:.4f}\tvalidation accuracy = {val_acc:.4f}')
             if best_val_acc < val_acc:
                 best_val_acc = val_acc
 
@@ -108,7 +107,9 @@ def run_best_model(run_params, start_epoch, trainers):  # start_epoch=1, trainer
     best_model_name = f'{model_name}_model_cls={APPLY_CLS}_{model_params_str}lr={lr}_wd={wd}'
     best_epoch_lst = []
     test_acc_folds_lst = []
+    print(f'best_model_name = {best_model_name}')
     for fold, (val_idxes, train_idxes) in enumerate(skf.split(data, targets), 1):
+        print(f'fold {fold}:')
         train_loader = set_data_loader(training_set, train_idxes, batch_size, CRITERION_TYPE, shuffle=True)
         val_loader = set_data_loader(training_set, val_idxes, batch_size, CRITERION_TYPE)
         test_loader = set_data_loader(test_set, val_idxes, batch_size, criterion_type='standard')
@@ -124,6 +125,7 @@ def run_best_model(run_params, start_epoch, trainers):  # start_epoch=1, trainer
         best_epoch = 0
         test_acc_lst = []
         for epoch in range(start_epoch, EPOCHS+1):
+            print(f'training epoch {epoch}')
             trainer.train_epoch(train_loader)
             trn_acc = trainer.evaluate_epoch(train_loader)
             val_acc = trainer.evaluate_epoch(val_loader)
@@ -149,7 +151,7 @@ def plot_best_model_results(folds_dict, model_name, folder_plot='plots'):
     trn_mat = []
     val_mat = []
     N = len(folds_dict)
-    for i in range(N):
+    for i in range(1, N+1):
         trn_mat.append(folds_dict[i]['train'])
         val_mat.append(folds_dict[i]['validation'])
     trn_arr = np.array(trn_mat).mean(0)
@@ -160,6 +162,7 @@ def plot_best_model_results(folds_dict, model_name, folder_plot='plots'):
 
 def save_best_trial(best_trial, save_folder_name='results'):
     save_folder = os.path.join(os.getcwd(), save_folder_name)
+    os.makedirs(save_folder, exist_ok=True)
     filename = f'{CRITERION_TYPE}_model={MODEL_ID}'
     file_path = os.path.join(save_folder, f'{filename}.json')
     save_params = {'model_params': best_trial.params, 'best_value': best_trial.values}
@@ -189,9 +192,9 @@ def main(params):
         study = optuna.create_study(study_name=f'study_{CRITERION_TYPE}', direction="maximize")
         study.optimize(objective, n_trials=n_trials)
         best_trial = study.best_trial
-        print(best_trial.values)  # best value acc?
-        print(best_trial.params)  # best params
-        save_best_trial(best_trial, MODEL_ID)
+        print(f'best trial values = {best_trial.values}')  # best value acc?
+        print(f'best trial params:\n{best_trial.params}')  # best params
+        save_best_trial(best_trial)
     elif exe_type == 'run_best':
         folds_dict, test_dict = {}, {}
         best_model_name = ""
